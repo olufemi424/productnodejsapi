@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 
+const checkAuth = require("../middleware/check-auth");
+
 const Order = require("../models/Order");
 const Product = require("../models/Product");
 
@@ -9,7 +11,7 @@ const Product = require("../models/Product");
 // GET @ localhost:PORT/orders
 // GET all orders from the db
 
-router.get("/", (req, res, next) => {
+router.get("/", checkAuth, (req, res, next) => {
   Order.find()
     .select("product quantity _id")
     .populate("product", "name")
@@ -42,7 +44,7 @@ router.get("/", (req, res, next) => {
 // @postdata {productQuantity}, {product}, {id},
 // Create new order object using the Order Schema to be stored in db
 
-router.post("/", (req, res, next) => {
+router.post("/", checkAuth, (req, res, next) => {
   Product.findById(req.body.productId)
     .then(product => {
       if (!product) {
@@ -79,7 +81,7 @@ router.post("/", (req, res, next) => {
 // expects an order {id} in the params objext of the request
 // responde with order object
 
-router.get("/:orderId", (req, res, next) => {
+router.get("/:orderId", checkAuth, (req, res, next) => {
   Order.findById(req.params.orderId)
     .populate("product")
     .then(order => {
@@ -105,7 +107,7 @@ router.get("/:orderId", (req, res, next) => {
 // expects an order {id} in the params object of the request
 // remove order from the db
 
-router.delete("/:orderId", (req, res, next) => {
+router.delete("/:orderId", checkAuth, (req, res, next) => {
   Order.deleteOne({ _id: req.params.orderId })
     .then(response => {
       res.status(200).json({

@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
+const checkAuth = require("../middleware/check-auth");
 
 //file upload
 const multer = require("multer");
@@ -81,7 +82,7 @@ router.get("/", (req, res, next) => {
 // Create new product object to be stored in db with imgae url
 
 // POST REQUEST to localhost:3000/products
-router.post("/", upload.single("productImage"), (req, res, next) => {
+router.post("/", checkAuth, upload.single("productImage"), (req, res, next) => {
   //create new product
   const product = new Product({
     _id: new mongoose.Types.ObjectId(),
@@ -120,7 +121,7 @@ router.post("/", upload.single("productImage"), (req, res, next) => {
 // GET single poducts with {id}
 // GET REQUEST to localhost:3000/products:productId
 
-router.get("/:productId", (req, res, next) => {
+router.get("/:productId", checkAuth, (req, res, next) => {
   const id = req.params.productId;
   Product.findById(id)
     .select("name price _id productImage")
@@ -152,7 +153,7 @@ router.get("/:productId", (req, res, next) => {
 // UPDATE DATA SENT FROM THE FRONT END IN THE DB
 // @postdata {name}, {price}, {id}
 
-router.patch("/:productId", (req, res, next) => {
+router.patch("/:productId", checkAuth, (req, res, next) => {
   const id = req.params.productId;
   const updatesOps = {};
 
@@ -183,7 +184,7 @@ router.patch("/:productId", (req, res, next) => {
 // DELETE REQUEST to localhost:3000/products:productId
 // DELETE DATA SENT FROM THE FRONT END IN THE DB
 
-router.delete("/:productId", (req, res, next) => {
+router.delete("/:productId", checkAuth, (req, res, next) => {
   const id = req.params.productId;
   Product.remove({ _id: id })
     .then(result => {

@@ -101,7 +101,9 @@ router.post("/login", (req, res, next) => {
       bcrypt.compare(req.body.password, user.password, (err, response) => {
         //if response is true, Auth is succesful
         if (response) {
-          //  jwp token config
+          //jwp token config
+          // @ {token} is used to make request to protected routes, this token expires in {1hr }  depending on what time that is being set.
+          //{protected from unauthorized user}
           const token = jwt.sign(
             {
               email: user.email,
@@ -113,11 +115,11 @@ router.post("/login", (req, res, next) => {
             }
           );
 
-          console.log(secretKey);
           return res.status(200).json({
             message: "Auth Succesful",
             success: true,
-            token: "Bearer " + token
+            // token: "Bearer " + token
+            token: token
           });
         } else {
           // return fail if not succesful
