@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 const Order = require("../models/Order");
 const Product = require("../models/Product");
 
-// OOrder end point
+// Order end point
 // GET @ localhost:PORT/orders
 // GET all orders from the db
 
