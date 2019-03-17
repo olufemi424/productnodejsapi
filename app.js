@@ -6,14 +6,14 @@ const mongoose = require("mongoose");
 
 const productRoutes = require("./api/routes/products");
 const ordersRoutes = require("./api/routes/orders");
+const userRoutes = require("./api/routes/user");
 
-console.log(process.env.MONGO_ATLAS_PW);
+// keys
+const db = require("./config/keys").mongoURI;
+
 //connect to mongo db
 mongoose
-  .connect(
-    `mongodb+srv://olufemi:123456abcd@nodejs-project-2ovej.mongodb.net/test?retryWrites=true"`,
-    { useNewUrlParser: true }
-  )
+  .connect(db, { useNewUrlParser: true, useCreateIndex: true })
   .then(() => console.log("MongoDb Connected")) //promise return
   .catch(err => console.log(err));
 
@@ -21,6 +21,11 @@ mongoose
 //Log our request types
 app.use(morgan("dev"));
 // Attached more fucntionilty to our request, get data from requests
+
+//parse upload to be avaiable
+app.use("/uploads", express.static("uploads"));
+
+//body parser
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -41,6 +46,7 @@ app.use((req, res, next) => {
 //Routes which should handle requests
 app.use("/products", productRoutes);
 app.use("/orders", ordersRoutes);
+app.use("/user", userRoutes);
 
 //Error Handle if url not match
 app.use((req, res, next) => {
