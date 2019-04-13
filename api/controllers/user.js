@@ -114,8 +114,8 @@ exports.user_login = (req, res, next) => {
           return res.status(200).json({
             message: "Auth Succesful",
             success: true,
-            // token: "Bearer " + token
-            token: token
+            token: "Bearer " + token
+            // token: token
           });
         } else {
           // return fail if not succesful

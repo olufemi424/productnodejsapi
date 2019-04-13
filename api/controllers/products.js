@@ -86,31 +86,30 @@ exports.products_create = (req, res, next) => {
 // GET single poducts with {id}
 // GET REQUEST to localhost:3000/products:productId
 
-(exports.products_get_product = checkAuth),
-  (req, res, next) => {
-    const id = req.params.productId;
-    Product.findById(id)
-      .select("name price _id productImage")
-      .then(doc => {
-        if (doc) {
-          res.status(201).json({
-            product: doc,
-            request: {
-              type: "GET",
-              description: "Get all Products",
-              url: "http://localhost:3000/products/"
-            }
-          });
-        } else {
-          res
-            .status(404)
-            .json({ message: "No valid entry found for provided product Id" });
-        }
-      })
-      .catch(err => {
-        res.status(500).json({ error: err });
-      });
-  };
+exports.products_get_product = (req, res, next) => {
+  const id = req.params.productId;
+  Product.findById(id)
+    .select("name price _id productImage")
+    .then(doc => {
+      if (doc) {
+        res.status(201).json({
+          product: doc,
+          request: {
+            type: "GET",
+            description: "Get all Products",
+            url: "http://localhost:3000/products/"
+          }
+        });
+      } else {
+        res
+          .status(404)
+          .json({ message: "No valid entry found for provided product Id" });
+      }
+    })
+    .catch(err => {
+      res.status(500).json({ error: err });
+    });
+};
 
 // Product end point
 // PATCH @ localhost:PORT/product/{id}
